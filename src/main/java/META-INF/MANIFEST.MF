@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: com.ltu.d0031n.schema.SchemaApplication
+

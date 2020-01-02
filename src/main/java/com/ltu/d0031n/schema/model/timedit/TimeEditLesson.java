@@ -1,7 +1,9 @@
-package com.ltu.d0031n.schema.model;
+package com.ltu.d0031n.schema.model.timedit;
 
 
 import java.util.List;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -17,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
         "columns"
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Lesson {
+public class TimeEditLesson {
 
     @JsonProperty("id")
     private String id;
@@ -91,5 +93,18 @@ public class Lesson {
     @JsonProperty("columns")
     public void setColumns(List<String> columns) {
         this.columns = columns;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TimeEditLesson that = (TimeEditLesson) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

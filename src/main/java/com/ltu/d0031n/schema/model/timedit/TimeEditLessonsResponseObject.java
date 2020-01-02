@@ -1,8 +1,6 @@
-package com.ltu.d0031n.schema.model;
+package com.ltu.d0031n.schema.model.timedit;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -12,12 +10,12 @@ import com.fasterxml.jackson.annotation.*;
         "reservations"
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TimeEditResponseObject {
+public class TimeEditLessonsResponseObject {
 
     @JsonProperty("columnheaders")
     private List<String> columnheaders = null;
     @JsonProperty("reservations")
-    private List<Lesson> lessons = null;
+    private List<TimeEditLesson> timeEditLessons = null;
 
 
     @JsonProperty("columnheaders")
@@ -31,13 +29,13 @@ public class TimeEditResponseObject {
     }
 
     @JsonProperty("reservations")
-    public List<Lesson> getLessons() {
-        return lessons;
+    public List<TimeEditLesson> getTimeEditLessons() {
+        return timeEditLessons;
     }
 
     @JsonProperty("reservations")
-    public void setLessons(List<Lesson> lessons) {
-        this.lessons = lessons;
+    public void setTimeEditLessons(List<TimeEditLesson> timeEditLessons) {
+        this.timeEditLessons = timeEditLessons;
     }
 
 }
