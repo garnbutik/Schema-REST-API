@@ -36,7 +36,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleDateTimeParseException(Exception e){
         CustomErrorResponse errors = new CustomErrorResponse();
         errors.setError("Could not parse date. Check your date format. Should be YYYY-MM-DD");
-        errors.setStatus(HttpStatus.NOT_FOUND.value());
+        errors.setStatus(HttpStatus.BAD_REQUEST.value());
         errors.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
