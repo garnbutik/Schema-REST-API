@@ -24,7 +24,6 @@ public class SchemaRestAPIController {
             @RequestParam(value = "startDate", defaultValue = "2000-01-01") String startDate,
             @RequestParam(value = "endDate", defaultValue = "2050-12-31") String endDate){
         ApiResponseModel response = fetchService.fetchFromTimeEdit(courseCode, startDate, endDate);
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
