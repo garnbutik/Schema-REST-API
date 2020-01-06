@@ -1,14 +1,13 @@
 package com.ltu.d0031n.schema.service.canvas;
 
 import com.ltu.d0031n.schema.exception.UserNotFoundException;
+import com.ltu.d0031n.schema.model.canvas.CalendarEvent;
+import com.ltu.d0031n.schema.model.canvas.CalendarEventCanvasPayload;
 import com.ltu.d0031n.schema.model.canvas.CanvasResponseUserObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,14 +17,22 @@ public class CanvasService {
     private final String token;
     RestTemplate restTemplate;
     String searchUrl = "https://ltu.instructure.com/api/v1/search/recipients?search=";
+    String createCaledarEventUrl = "https://ltu.instructure.com/api/v1/calendar_events";
 
     @Autowired  //Bind value of access token from the application.propery file
     public CanvasService(@Value("${access-token}") String token) {
         this.token = token;
     }
 
-    public void postToCanvas(){
-
+    public void createCaledarEvent(CalendarEvent event){
+        CalendarEventCanvasPayload payload = new CalendarEventCanvasPayload();
+        payload.setCalendarEvent(event);
+        restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + this.token);
+        HttpEntity<CalendarEventCanvasPayload> entity = new HttpEntity<>(payload, headers);
+        ResponseEntity<CalendarEvent> responseEntity = restTemplate.postForEntity(createCaledarEventUrl, entity, CalendarEvent.class);
     }
 
     //Get user id from Canvas
