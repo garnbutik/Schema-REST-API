@@ -2,10 +2,14 @@ package com.ltu.d0031n.schema.service;
 
 import com.ltu.d0031n.schema.model.apiResponse.ApiResponseModel;
 import com.ltu.d0031n.schema.model.apiResponse.ResponseLesson;
+import com.ltu.d0031n.schema.model.canvas.ApiCanvasRequestBody;
+import com.ltu.d0031n.schema.model.canvas.CalendarEvent;
+import com.ltu.d0031n.schema.model.canvas.CalendarEventCanvasPayload;
 import com.ltu.d0031n.schema.model.timedit.TimeEditLesson;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -16,7 +20,7 @@ public class ResponseTransformer {
     /*
     Transforms response from TimeEdit to API response
      */
-    public ApiResponseModel transformToResponse(Set<TimeEditLesson> timeEditLessons){
+    public ApiResponseModel fromTimeEditformToResponse(Set<TimeEditLesson> timeEditLessons){
         ApiResponseModel responseModel = new ApiResponseModel(new ArrayList<>());
 
         //Get first object in set and set course code and name
@@ -64,4 +68,23 @@ public class ResponseTransformer {
         Iterator<TimeEditLesson> iterator = lessons.iterator();
         return iterator.next();
     }
+
+    public List<CalendarEventCanvasPayload> fromApiToCanvas(ApiCanvasRequestBody canvasModel) {
+        List<CalendarEventCanvasPayload> events = new ArrayList<>();
+        for (ResponseLesson lesson : canvasModel.getLessons()) {
+            CalendarEventCanvasPayload payload = new CalendarEventCanvasPayload();
+            CalendarEvent calendarEvent = new CalendarEvent();
+            calendarEvent.setTitle(String.format("%s %s", lesson.getActivity(), lesson.getTeacher()));
+            calendarEvent.setComments(lesson.getAdditionalProps());
+            calendarEvent.setStartAt(LocalDateTime.of(lesson.getStartdate(), lesson.getStarttime()).toString());
+            calendarEvent.setEndAt(LocalDateTime.of(lesson.getEnddate(), lesson.getEndtime()).toString());
+            calendarEvent.setLocationAddress(lesson.getCity());
+            calendarEvent.setLocationName(lesson.getLocation());
+            calendarEvent.setContextCode(canvasModel.getContextCode());
+            payload.setCalendarEvent(calendarEvent);
+            events.add(payload);
+        }
+        return events;
+    }
+
 }

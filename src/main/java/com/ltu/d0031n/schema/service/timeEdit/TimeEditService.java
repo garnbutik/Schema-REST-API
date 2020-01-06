@@ -1,4 +1,4 @@
-package com.ltu.d0031n.schema.service;
+package com.ltu.d0031n.schema.service.timeEdit;
 
 import com.ltu.d0031n.schema.exception.CourseNotFoundException;
 import com.ltu.d0031n.schema.exception.NoLessonsFoundException;
@@ -6,6 +6,7 @@ import com.ltu.d0031n.schema.model.apiResponse.ApiResponseModel;
 import com.ltu.d0031n.schema.model.timedit.TimeEditLesson;
 import com.ltu.d0031n.schema.model.timedit.TimeEditIdResponseObject;
 import com.ltu.d0031n.schema.model.timedit.TimeEditLessonsResponseObject;
+import com.ltu.d0031n.schema.service.ResponseTransformer;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Service
-public class FetchService {
+public class TimeEditService {
 
     private RestTemplate restTemplate;
     private String idFetchUrl =
@@ -43,7 +44,7 @@ public class FetchService {
         }
 
         ResponseTransformer transformer = new ResponseTransformer();
-        return transformer.transformToResponse(timeEditLessons);
+        return transformer.fromTimeEditformToResponse(timeEditLessons);
     }
 
     private List<String> fetchIdFromTimeEdit(String courseCode){
