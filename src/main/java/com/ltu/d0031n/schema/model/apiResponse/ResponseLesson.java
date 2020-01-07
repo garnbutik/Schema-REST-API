@@ -2,11 +2,14 @@ package com.ltu.d0031n.schema.model.apiResponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class ResponseLesson implements Comparable<ResponseLesson> {
+public class ResponseLesson implements Comparable<ResponseLesson>, Serializable {
 
     @JsonProperty("id")
     private String id;
