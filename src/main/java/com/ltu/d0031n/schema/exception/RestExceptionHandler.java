@@ -51,4 +51,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(CouldNotPostToCanvasException.class)
+    public ResponseEntity<Object> handlePostToCanvasError(Exception e) {
+        return new ResponseEntity<>(
+                "Could not post to Canvas, please check your request",
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

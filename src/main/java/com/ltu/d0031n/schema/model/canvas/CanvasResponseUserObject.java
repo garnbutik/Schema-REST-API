@@ -2,6 +2,9 @@ package com.ltu.d0031n.schema.model.canvas;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+
 public class CanvasResponseUserObject {
 
     @JsonProperty("id")
@@ -19,7 +22,12 @@ public class CanvasResponseUserObject {
     }
     @JsonProperty("id")
     public void setId(String id) {
-        this.id = "user_" + id;
+        if (isNumeric(id)) {
+            this.id = "user_" + id;
+        } else {
+            this.id = id;
+        }
+
     }
 
     @JsonProperty("name")
@@ -38,5 +46,12 @@ public class CanvasResponseUserObject {
     @JsonProperty("fullName")
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    private boolean isNumeric(String str) {
+        NumberFormat formatter = NumberFormat.getInstance();
+        ParsePosition pos = new ParsePosition(0);
+        formatter.parse(str, pos);
+        return str.length() == pos.getIndex();
     }
 }
