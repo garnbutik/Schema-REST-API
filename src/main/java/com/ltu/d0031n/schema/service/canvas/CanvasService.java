@@ -2,7 +2,6 @@ package com.ltu.d0031n.schema.service.canvas;
 
 import com.ltu.d0031n.schema.exception.ContextNotFoundException;
 import com.ltu.d0031n.schema.exception.CouldNotPostToCanvasException;
-import com.ltu.d0031n.schema.model.apiResponse.ApiResponseModel;
 import com.ltu.d0031n.schema.model.canvas.ApiCanvasRequestBody;
 import com.ltu.d0031n.schema.model.canvas.CalendarEvent;
 import com.ltu.d0031n.schema.model.canvas.CalendarEventCanvasPayload;
@@ -32,7 +31,7 @@ public class CanvasService {
         this.token = token;
     }
 
-    public Map<String, List<CalendarEvent>> postToCanvas(ApiCanvasRequestBody requestModel) {
+    public ResponseEntity<Map<String, List<CalendarEvent>>> postToCanvas(ApiCanvasRequestBody requestModel) {
 
         //Map to hold map of responses from Canvas
         Map<String, List<CalendarEvent>> responses = new HashMap<>();
@@ -68,11 +67,12 @@ public class CanvasService {
         // add success list to map
         responses.put("success", eventsSuccess);
 
-        //if one or more failed events exists list is added to map
         if (eventsFailed.size() > 0) {
             responses.put("failed", eventsFailed);
+            return new ResponseEntity<>(responses, HttpStatus.MULTI_STATUS);
         }
-        return responses;
+
+        return new ResponseEntity<>(responses, HttpStatus.CREATED);
     }
 
     private ResponseEntity<CalendarEvent> createCaledarEvent(CalendarEventCanvasPayload payload){

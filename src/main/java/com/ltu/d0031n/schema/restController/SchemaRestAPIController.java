@@ -38,14 +38,15 @@ public class SchemaRestAPIController {
     }
 
     @PostMapping("/canvas")
-    public Map<String, List<CalendarEvent>> postToCanvas(@RequestBody ApiCanvasRequestBody requestObject){
+    public ResponseEntity<Map<String, List<CalendarEvent>>> postToCanvas(
+            @RequestBody ApiCanvasRequestBody requestObject){
         return canvasService.postToCanvas(requestObject);
     }
 
     @GetMapping("/context-codes/{name}")
-    public ContextObject[] getLessons(
+    public ResponseEntity<ContextObject[]> getContext(
             @PathVariable("name") String name){
         ContextObject[] response = canvasService.getContext(name);
-        return response;
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
