@@ -3,7 +3,7 @@ package com.ltu.d0031n.schema.restController;
 import com.ltu.d0031n.schema.model.apiResponse.ApiResponseModel;
 import com.ltu.d0031n.schema.model.canvas.ApiCanvasRequestBody;
 import com.ltu.d0031n.schema.model.canvas.CalendarEvent;
-import com.ltu.d0031n.schema.model.canvas.CanvasResponseUserObject;
+import com.ltu.d0031n.schema.model.canvas.ContextObject;
 import com.ltu.d0031n.schema.service.timeEdit.TimeEditService;
 import com.ltu.d0031n.schema.service.canvas.CanvasService;
 
@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -43,10 +42,10 @@ public class SchemaRestAPIController {
         return canvasService.postToCanvas(requestObject);
     }
 
-    @GetMapping("/users/{name}")
-    public CanvasResponseUserObject[] getLessons(
+    @GetMapping("/context-codes/{name}")
+    public ContextObject[] getLessons(
             @PathVariable("name") String name){
-        CanvasResponseUserObject[] response = canvasService.getUserId(name);
+        ContextObject[] response = canvasService.getContext(name);
         return response;
     }
 }

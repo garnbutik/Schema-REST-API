@@ -41,8 +41,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleUserNotFound(Exception e){
+    @ExceptionHandler(ContextNotFoundException.class)
+    public ResponseEntity<Object> handleContextNotFound(Exception e){
 
         CustomErrorResponse errors = new CustomErrorResponse();
         errors.setError(e.getMessage());
