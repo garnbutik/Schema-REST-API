@@ -23,8 +23,12 @@ public class ResponseTransformer {
     public ApiResponseModel fromTimeEditformToResponse(Set<TimeEditLesson> timeEditLessons){
         ApiResponseModel responseModel = new ApiResponseModel(new ArrayList<>());
 
-        //Get first object in set and set course code and name
-        responseModel.setCourse(getFirstObject(timeEditLessons).getColumns().get(5));
+        //Get first object in set and set course code and name with customizations and without duplicates
+        String nameWithoutDuplicates = getFirstObject(timeEditLessons).getColumns().get(5)
+            .substring(0, getFirstObject(timeEditLessons).getColumns().get(5).indexOf(","));
+        String customizedName = nameWithoutDuplicates.substring(0, nameWithoutDuplicates.indexOf(".")) 
+            + " -" +nameWithoutDuplicates.substring(nameWithoutDuplicates.indexOf(".") +1) + ".";
+        responseModel.setCourse(customizedName);
 
         //Loop the lessons and convert to API response
         for (TimeEditLesson lesson : timeEditLessons){

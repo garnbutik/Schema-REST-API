@@ -13,49 +13,43 @@ import java.time.format.DateTimeParseException;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CourseNotFoundException.class)
-    public ResponseEntity<Object> handleCourseNotFound(Exception e){
-
-        CustomErrorResponse errors = new CustomErrorResponse();
-        errors.setError(e.getMessage());
-        errors.setStatus(HttpStatus.NOT_FOUND.value());
-        errors.setTimestamp(LocalDateTime.now());
-        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> handleCourseNotFound(Exception e) {
+        return createErrorResponseEntity(e, HttpStatus.NOT_FOUND, "");
     }
 
     @ExceptionHandler(NoLessonsFoundException.class)
-    public ResponseEntity<Object> handleNoLessonsNotFound(Exception e){
+    public ResponseEntity<Object> handleNoLessonsNotFound(Exception e) {
+        return createErrorResponseEntity(e, HttpStatus.NOT_FOUND, "");
 
-        CustomErrorResponse errors = new CustomErrorResponse();
-        errors.setError(e.getMessage());
-        errors.setStatus(HttpStatus.NOT_FOUND.value());
-        errors.setTimestamp(LocalDateTime.now());
-        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(DateTimeParseException.class)
     public ResponseEntity<Object> handleDateTimeParseException(Exception e){
-        CustomErrorResponse errors = new CustomErrorResponse();
-        errors.setError("Could not parse date. Check your date format. Should be YYYY-MM-DD");
-        errors.setStatus(HttpStatus.BAD_REQUEST.value());
-        errors.setTimestamp(LocalDateTime.now());
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return createErrorResponseEntity(e, HttpStatus.BAD_REQUEST,
+                "Could not parse date. Check your date format. Should be YYYY-MM-DD");
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleUserNotFound(Exception e){
-
-        CustomErrorResponse errors = new CustomErrorResponse();
-        errors.setError(e.getMessage());
-        errors.setStatus(HttpStatus.NOT_FOUND.value());
-        errors.setTimestamp(LocalDateTime.now());
-        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(ContextNotFoundException.class)
+    public ResponseEntity<Object> handleContextNotFound(Exception e){
+        return createErrorResponseEntity(e, HttpStatus.NOT_FOUND, "");
     }
 
     @ExceptionHandler(CouldNotPostToCanvasException.class)
     public ResponseEntity<Object> handlePostToCanvasError(Exception e) {
-        return new ResponseEntity<>(
-                "Could not post to Canvas, please check your request",
-                HttpStatus.INTERNAL_SERVER_ERROR);
+        return createErrorResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR,
+                "Could not post to Canvas, please check your request");
+    }
+
+    private ResponseEntity<Object> createErrorResponseEntity(Exception e, HttpStatus httpStatus, String errorMessage) {
+        CustomErrorResponse errorResponse = new CustomErrorResponse();
+        if (errorMessage.isEmpty()) {
+            errorResponse.setError(e.getMessage());
+        } else {
+            errorResponse.setError(errorMessage);
+        }
+        errorResponse.setStatus(httpStatus.value());
+        errorResponse.setTimestamp(LocalDateTime.now());
+        return new ResponseEntity<>(errorResponse, httpStatus);
     }
 
 }

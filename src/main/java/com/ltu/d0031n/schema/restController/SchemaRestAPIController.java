@@ -3,7 +3,7 @@ package com.ltu.d0031n.schema.restController;
 import com.ltu.d0031n.schema.model.apiResponse.ApiResponseModel;
 import com.ltu.d0031n.schema.model.canvas.ApiCanvasRequestBody;
 import com.ltu.d0031n.schema.model.canvas.CalendarEvent;
-import com.ltu.d0031n.schema.model.canvas.CanvasResponseUserObject;
+import com.ltu.d0031n.schema.model.canvas.ContextObject;
 import com.ltu.d0031n.schema.service.timeEdit.TimeEditService;
 import com.ltu.d0031n.schema.service.canvas.CanvasService;
 
@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -39,14 +38,15 @@ public class SchemaRestAPIController {
     }
 
     @PostMapping("/canvas")
-    public Map<String, List<CalendarEvent>> postToCanvas(@RequestBody ApiCanvasRequestBody requestObject){
+    public ResponseEntity<Map<String, List<CalendarEvent>>> postToCanvas(
+            @RequestBody ApiCanvasRequestBody requestObject){
         return canvasService.postToCanvas(requestObject);
     }
 
-    @GetMapping("/users/{name}")
-    public CanvasResponseUserObject[] getLessons(
+    @GetMapping("/context-codes/{name}")
+    public ResponseEntity<ContextObject[]> getContext(
             @PathVariable("name") String name){
-        CanvasResponseUserObject[] response = canvasService.getUserId(name);
-        return response;
+        ContextObject[] response = canvasService.getContext(name);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

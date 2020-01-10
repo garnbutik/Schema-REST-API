@@ -1,16 +1,11 @@
 package com.ltu.d0031n.schema.model.apiResponse;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 import java.util.List;
 
 public class ApiResponseModel implements Serializable {
 
-    @JsonProperty("course")
     private String course;
-
-    @JsonProperty("lessons")
     private List<ResponseLesson> lessons;
 
     public String getCourse() {

@@ -1,13 +1,11 @@
 package com.ltu.d0031n.schema.service.canvas;
 
+import com.ltu.d0031n.schema.exception.ContextNotFoundException;
 import com.ltu.d0031n.schema.exception.CouldNotPostToCanvasException;
-import com.ltu.d0031n.schema.exception.UserNotFoundException;
-import com.ltu.d0031n.schema.model.apiResponse.ApiResponseModel;
 import com.ltu.d0031n.schema.model.canvas.ApiCanvasRequestBody;
 import com.ltu.d0031n.schema.model.canvas.CalendarEvent;
 import com.ltu.d0031n.schema.model.canvas.CalendarEventCanvasPayload;
-import com.ltu.d0031n.schema.model.canvas.CanvasResponseUserObject;
-
+import com.ltu.d0031n.schema.model.canvas.ContextObject;
 import com.ltu.d0031n.schema.service.ResponseTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +31,7 @@ public class CanvasService {
         this.token = token;
     }
 
-    public Map<String, List<CalendarEvent>> postToCanvas(ApiCanvasRequestBody requestModel) {
+    public ResponseEntity<Map<String, List<CalendarEvent>>> postToCanvas(ApiCanvasRequestBody requestModel) {
 
         //Map to hold map of responses from Canvas
         Map<String, List<CalendarEvent>> responses = new HashMap<>();
@@ -69,11 +67,12 @@ public class CanvasService {
         // add success list to map
         responses.put("success", eventsSuccess);
 
-        //if one or more failed events exists list is added to map
         if (eventsFailed.size() > 0) {
             responses.put("failed", eventsFailed);
+            return new ResponseEntity<>(responses, HttpStatus.MULTI_STATUS);
         }
-        return responses;
+
+        return new ResponseEntity<>(responses, HttpStatus.CREATED);
     }
 
     private ResponseEntity<CalendarEvent> createCaledarEvent(CalendarEventCanvasPayload payload){
@@ -85,6 +84,8 @@ public class CanvasService {
         ResponseEntity<CalendarEvent> responseEntity = restTemplate.postForEntity(createCaledarEventUrl, entity, CalendarEvent.class);
         return responseEntity;
     }
+
+
 
 //    public void createCaledarEvent(CalendarEvent event){
 //        CalendarEventCanvasPayload payload = new CalendarEventCanvasPayload();
@@ -98,7 +99,7 @@ public class CanvasService {
 //    }
 
     //Get user id from Canvas
-    public CanvasResponseUserObject[] getUserId(String name) {
+    public ContextObject[] getContext(String name) {
         String url = searchUrl + name;
         restTemplate = new RestTemplate();
 
@@ -108,12 +109,12 @@ public class CanvasService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
         
         //Get array of users
-        ResponseEntity<CanvasResponseUserObject[]> response = restTemplate.exchange(
-            url, HttpMethod.GET, entity, CanvasResponseUserObject[].class);
-        CanvasResponseUserObject[] users = response.getBody();
+        ResponseEntity<ContextObject[]> response = restTemplate.exchange(
+            url, HttpMethod.GET, entity, ContextObject[].class);
+            ContextObject[] users = response.getBody();
 
         if (response == null || users == null || users.length == 0 || users[0].getId() == null) {
-            throw new UserNotFoundException(name);
+            throw new ContextNotFoundException(name);
         }
 
         return users;

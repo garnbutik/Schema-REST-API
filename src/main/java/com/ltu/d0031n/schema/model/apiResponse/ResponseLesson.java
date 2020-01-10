@@ -1,9 +1,5 @@
 package com.ltu.d0031n.schema.model.apiResponse;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,34 +7,15 @@ import java.time.LocalTime;
 
 public class ResponseLesson implements Comparable<ResponseLesson>, Serializable {
 
-    @JsonProperty("id")
     private String id;
-
-    @JsonProperty("startdate")
     private LocalDate startdate;
-
-    @JsonProperty("starttime")
     private LocalTime starttime;
-
-    @JsonProperty("enddate")
     private LocalDate enddate;
-
-    @JsonProperty("endtime")
     private LocalTime endtime;
-
-    @JsonProperty("location")
     private String location;
-
-    @JsonProperty("teacher")
     private String teacher;
-
-    @JsonProperty("activity")
     private String activity;
-
-    @JsonProperty("city")
     private String city;
-
-    @JsonProperty("additionalProps")
     private String additionalProps;
 
     public String getId() {
